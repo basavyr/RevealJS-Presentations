@@ -1,2 +1,3 @@
-# TIM19presentation
-Presentation for TIM19 conference - using REVEAL.JS
+# RevealJS Presentations
+
+A collection of presentations (from Conferences in which I've participated to) made using the RevealJS framework. 
