@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+	<html class="sl-root decks export offline loaded">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<title>xrootd_roedunet_2020</title>
+
+		<meta name="description" content="C++ Declarative API presentation | roedunet 2020">
+
+		<link rel="stylesheet" type="text/css" href="lib/offline-v2.css">
+
+
+
+	</head>
+	<body class="reveal-viewport theme-font-montserrat theme-color-white-blue">
+		<div class="reveal">
+			<div class="slides">
+				<section class="stack" data-id="84b8a5d434f512926c9d7372246e6496"><section data-id="df5023845462e0764a77d3f4d4598cf7"><div class="sl-block" data-block-type="text" style="width: 806px; left: 74px; top: 70px; height: auto;" data-block-id="f43fa8f7c395fb9df64228395c17125c">
+<div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" dir="ui" style="z-index: 10;">
+<h1><span style="font-size:1.0em">C++ Declarative API</span></h1>
+
+<h3><span style="font-size:24.000000pt">Implementation Overview Within the XRootD Framework </span></h3>
+</div>
+<grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 10;" class="cGcvT"></grammarly-extension><p>
+<grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: auto;" class="_1KJtL"></grammarly-extension></p>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 600px; left: 180px; top: 511.5px;" data-name="text-1cf3bd" data-block-id="dba005cc5fa99a70d2f5ef9bfa0d83c4"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;">
+<p>Robert Poenaru</p>
+
+<p>Research Assistant  @ IFIN-HH</p>
+
+<p><em>robert.poenaru@protonmail.ch</em></p>
+</div></div></section><section data-id="6506955ad4c0028fc47a4d3054868362"><div class="sl-block" data-block-type="text" style="height: auto; width: 252px; left: 0px; top: 0px;" data-name="text-685d4e" data-block-id="e5e7005b2dfdec63f11e07b37343f763"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h2>Outline</h2>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 820px; left: 17px; top: 159px;" data-name="text-d71976" data-block-id="5abd40b9997045c6945303eaf6e031d6"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; text-align: left; line-height: 2.054; font-size: 84%;" data-has-line-height="">
+<ul>
+	<li>Aim &amp; Motivation</li>
+	<li>XRootD - framework overview
+	<ul>
+		<li>Server-side</li>
+		<li>Client-side</li>
+	</ul>
+	</li>
+	<li>Standard C++ API of the XRootD client: File and FileSystem APIs</li>
+	<li>New C++ API for the XRootD client
+	<ul>
+		<li>Development of an Erasure Coding plug-in</li>
+	</ul>
+	</li>
+	<li>Conclusions</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 549.698px; height: 312.393px; left: 408px; top: 53px; min-width: 1px; min-height: 1px;" data-name="image-a5fdd6" data-block-id="a0987f14a836457769af1ba3eaad33e6"><div class="sl-block-content" style="z-index: 12;"><img style="" data-natural-width="1552" data-natural-height="882" data-lazy-loaded="" data-src="deck-344bb1/2511a97854a070c433372294b9f31c79.png"></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 220px; left: 0px; top: 651px;" data-name="text-bad6e2" data-block-id="f745ecb8be7bacfb8c4ad70af29cff85"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>#roedunet #december2020</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 249px; left: 700.5px; top: 651px;" data-name="text-3f5367" data-block-id="6cb4af4420b25921fdcf95e4446fd35d"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>Robert Poenaru | DFCTI @ IFIN-HH</em></span></span></p>
+</div></div></section><section data-id="e0dd95cd34fcf249488da9d6427aed9d"><div class="sl-block" data-block-type="text" style="height: auto; width: 361px; left: 0px; top: 0px;" data-name="text-685d4e" data-block-id="4a5306b38127d272a9a62d568688d8a9"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h2>About me</h2>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 912px; left: 23px; top: 101px;" data-name="text-d71976" data-block-id="efe23d9fdf3fca306db4f00a1aefa24b"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; text-align: left; line-height: 1.729; font-size: 85%;" data-has-line-height="">
+<ul>
+	<li>
+<strong>Research Assistant</strong> @ Department of Theoretical Physics (IFIN-HH)
+	<ul>
+		<li>Part-time R.A. @ Department of Computational Physics and Information Technology (IFIN-HH)</li>
+	</ul>
+	</li>
+	<li>
+<strong>Ph.D. student</strong> @ Faculty of Physics (University of Bucharest)
+	<ul>
+		<li>Topic: Nuclear Structure (Theoretical Physics)</li>
+		<li>Studying the structure of the triaxially deformed nuclei
+		<ul>
+			<li>Developing (phenomenological) models that describe the rotational effects in deformed nuclear isotopes</li>
+		</ul>
+		</li>
+	</ul>
+	</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 77px; height: 77px; left: 726px; top: 528px; min-width: 1px; min-height: 1px;" data-name="image-bfdefe" data-block-id="73d3fa774fd12740d5f33eabc1f087f5"><div class="sl-block-content" style="z-index: 12;"><img style="" data-natural-width="512" data-natural-height="512" data-lazy-loaded="" data-src="deck-344bb1/ff35264b1e1f504e9b336e8c76190128.png"></div></div>
+<div class="sl-block" data-block-type="image" style="width: 77px; height: 77px; left: 825px; top: 528px; min-width: 1px; min-height: 1px;" data-name="image-91b342" data-block-id="3ff9366d2a8963bda9a34a2a9b493fc0"><div class="sl-block-content" style="z-index: 13;"><img style="" data-natural-width="512" data-natural-height="512" data-lazy-loaded="" data-src="deck-344bb1/9ae3a2ec61599ee689dd0e20b65f3540.png"></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 172px; left: 726px; top: 609.5px;" data-name="text-dc6266" data-block-id="1f5a7ef155deb3e5d4b9c6e221ec1fc8"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14;">
+<p><em>@basavyr</em></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 220px; left: 0px; top: 651px;" data-name="text-bad6e2" data-block-id="32a6fd41a98e6b9fe583e2ab455318db"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>#roedunet #december2020</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 249px; left: 700.5px; top: 651px;" data-block-id="61819fa052142f332ae4b184f0b9a2e2" data-name="text-3f5367"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 16;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>Robert Poenaru | DFCTI @ IFIN-HH</em></span></span></p>
+</div></div></section><section data-id="c20e7357cd527825908726839e231599"><div class="sl-block" data-block-type="text" style="height: auto; width: 560px; left: 12px; top: 0px;" data-name="text-685d4e" data-block-id="440f8779b12ef6f4ac24e8c5bb5aa3ed"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h2>Some disclaimers...</h2>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 926.5px; left: 13px; top: 101px;" data-name="text-d71976" data-block-id="a0423a51223c18caccd1d1489d52acae"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; text-align: left; line-height: 1.729; font-size: 85%;" data-has-line-height="">
+<ul>
+	<li>
+	<p><strong>xrd</strong>: refers to the XRootD term</p>
+	</li>
+	<li>
+	<p><strong>client</strong>: referring to the XRootD client</p>
+	</li>
+	<li>
+	<p><strong>server</strong>: referring to the XRootD server-side</p>
+	</li>
+	<li>
+	<p><strong>standard C++ API</strong>: referring to the (pre-existing) XRootD client-based API, that is developed in C++ (both asynchronous and synchronous implementations)</p>
+	</li>
+	<li>
+	<p><strong>new/Declarative API</strong>: referring to the newly developed C++ API for the client</p>
+	</li>
+</ul>
+</div></div>
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 220px; left: 0px; top: 651px;" data-name="text-bad6e2" data-block-id="269e71ee72f81cfdf8afec822d24099e"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>#roedunet #december2020</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 249px; left: 700.5px; top: 651px;" data-name="text-3f5367" data-block-id="86388d9d7ab6fca776d760ae614eec4b"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 16;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>Robert Poenaru | DFCTI @ IFIN-HH</em></span></span></p>
+</div></div></section><section data-id="ee36d7b5f2b405c65975c1e891a5c2d6"><div class="sl-block" data-block-type="text" style="height: auto; width: 213px; left: 0px; top: 0px;" data-name="text-685d4e" data-block-id="f9d81adacce039cca0cb59107dbd026c"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h2>Aim</h2>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 912px; left: 23px; top: 101px;" data-name="text-d71976" data-block-id="00328b72277fcd1b864038eff73c1285"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; text-align: left; line-height: 1.729; font-size: 85%;" data-has-line-height="">
+<ul>
+	<li>
+	<p>Provide an overview of the XRootD framework that is used within <strong>WLCG</strong></p>
+
+	<ul>
+		<li>
+		<p>​server-side</p>
+		</li>
+		<li>
+		<p>client-side</p>
+		</li>
+	</ul>
+	</li>
+	<li>
+	<p>Overview of the standard C++ API for the XRootD client</p>
+	</li>
+	<li>
+	<p>C++ Declarative API for the XRootD client</p>
+
+	<ul>
+		<li>Structural overview (in terms of implementation)</li>
+		<li>Case-study: Erasure Coding plug-in mechanism</li>
+	</ul>
+	</li>
+</ul>
+</div></div>
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 220px; left: 0px; top: 651px;" data-name="text-bad6e2" data-block-id="2636c0b9c1bef0d6e78fb9b033d71c6b"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>#roedunet #december2020</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 249px; left: 700.5px; top: 651px;" data-name="text-3f5367" data-block-id="85dd4aae84cfbddfa2a938b426b07b2c"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 16;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>Robert Poenaru | DFCTI @ IFIN-HH</em></span></span></p>
+</div></div></section><section data-id="9744a6277bacb603f1627e32a6a98004"><div class="sl-block" data-block-type="text" style="height: auto; width: 388px; left: 0px; top: 0px;" data-name="text-685d4e" data-block-id="6ee9bf965a3272ecc0c3773aaf375db8"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h2>Motivation</h2>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 912px; left: 23px; top: 101px;" data-name="text-d71976" data-block-id="36aa5b29f12bfcd9456172adc6c83132">
+<div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; text-align: left; line-height: 1.729; font-size: 85%;" data-has-line-height="" dir="ui">
+<ul>
+	<li>
+	<p>The standard C++ API can become quite <em>cumbersome </em>in:</p>
+
+	<ul>
+		<li>
+		<p><span style="color:rgb(0, 0, 0); font-size:25.5px"> workflows that involve parallel operations</span></p>
+		</li>
+		<li>
+		<p>containerized operations that need to be executed asynchronously</p>
+		</li>
+	</ul>
+	</li>
+	<li>
+	<p>Simplification of the codebase could be beneficial for the end-user (when using the client) -&gt; a <em>Declarative </em>approach</p>
+
+	<ul>
+		<li>
+		<p>reduce code complexity</p>
+		</li>
+		<li>
+		<p>makes a workflow more readable</p>
+		</li>
+		<li>
+		<p>proves to be more in line with modern C++ coding techniques </p>
+		</li>
+	</ul>
+	</li>
+</ul>
+</div>
+<grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension><grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension>
+</div>
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 220px; left: 0px; top: 651px;" data-name="text-bad6e2" data-block-id="feeeff4c23a5d8132aa68b59ef81d6b9"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>#roedunet #december2020</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 249px; left: 700.5px; top: 651px;" data-name="text-3f5367" data-block-id="d7279a045ce0d49d07005aeda6976abb"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>Robert Poenaru | DFCTI @ IFIN-HH</em></span></span></p>
+</div></div></section><section data-id="7e5e7f4ccc1d6d3f75899a7f7073d1e8"><div class="sl-block" data-block-type="text" style="height: auto; width: 606px; left: 0px; top: 0px;" data-name="text-685d4e" data-block-id="b888e418d364d67c8e615482b123f25a"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h2>XRootD Framework</h2>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 912px; left: 23px; top: 111px;" data-name="text-d71976" data-block-id="da9b6c528e1a3639f58ca8c9ce3962e7">
+<div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; text-align: left; line-height: 1.729; font-size: 85%;" data-has-line-height="" dir="ui">
+<ul>
+	<li>
+	<p>Service that provides <em>remote access</em> to <strong>root</strong> files.</p>
+
+	<ul>
+		<li>
+		<p> root: a framework for data analysis, developed at CERN.</p>
+		</li>
+	</ul>
+	</li>
+	<li>
+	<p>Developed firstly at Stanford Linear Accelerator Center, now maintained together with CERN</p>
+	</li>
+	<li>
+	<p>It is the standard remote file access within the WLCG.</p>
+	</li>
+	<li>
+	<p>Currently, the framework is used in:</p>
+
+	<ul>
+		<li>
+		<p>data access</p>
+		</li>
+		<li>
+		<p>data management</p>
+		</li>
+		<li>
+		<p>data analysis</p>
+		</li>
+	</ul>
+	</li>
+</ul>
+</div>
+<grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension><grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension>
+</div>
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 220px; left: 0px; top: 651px;" data-name="text-bad6e2" data-block-id="552ba538a40aa356f99429cdd81899c2"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>#roedunet #december2020</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 249px; left: 700.5px; top: 651px;" data-name="text-3f5367" data-block-id="f55d44570f6638e5d5cf6ab3568abd24"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>Robert Poenaru | DFCTI @ IFIN-HH</em></span></span></p>
+</div></div></section><section data-id="c2952d4df9a8fa77b08f6947c7887944"><div class="sl-block" data-block-type="text" style="height: auto; width: 606px; left: 0px; top: 0px;" data-name="text-685d4e" data-block-id="24c2383d2e4a75182b8c5a922e8a52a3"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h2>XRootD Framework</h2>
+</div></div>
+
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 220px; left: 0px; top: 651px;" data-name="text-bad6e2" data-block-id="b01d3317ef86a04f146278ee62a78a61"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>#roedunet #december2020</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 249px; left: 700.5px; top: 651px;" data-name="text-3f5367" data-block-id="a6d7ba7d4376537ff87e8025e4a51c84"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>Robert Poenaru | DFCTI @ IFIN-HH</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 271.684px; height: 399px; left: 653.644px; top: 140px; min-width: 1px; min-height: 1px;" data-name="image-952426" data-block-id="8c0dcfa457f9e55e8626c136dc19a6f1"><div class="sl-block-content" style="z-index: 13;"><img style="" data-natural-width="239" data-natural-height="351" data-lazy-loaded="" data-src="deck-344bb1/71dfc5bd6a27e726cd0df6aec49cc056.png"></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 611px; left: 23px; top: 111px;" data-name="text-d71976" data-block-id="889af84266a72fd30ef14e328ef7cf53">
+<div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14; text-align: left; line-height: 1.729; font-size: 85%;" data-has-line-height="" dir="ui">
+<ul>
+	<li>
+	<p>Any user (e.g. scientist) that wants access to remote files interacts with the XRootD framework via the<strong> </strong>XRootD <em>client</em>.</p>
+	</li>
+	<li>
+	<p>Furthermore, the XRootD <em>server</em> implementation will search for the required data (files), through a <em>federated storage system, </em>by using a so-called <em>redirector.</em></p>
+	</li>
+</ul>
+</div>
+<grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension><grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 600px; left: 40px; top: 590px;" data-name="text-7b427c" data-block-id="c4eed38c592b327f5c2ef50960704a2b"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15; font-size: 49%;">
+<p style="text-align:left"><em>Bauerdick, L., et al. "Using xrootd to federate regional storage." Journal of Physics: Conference Series. Vol. 396. No. 4. IOP Publishing, 2012.</em></p>
+</div></div></section><section data-id="0499b61d733201c5a8b66470cf00ab77"><div class="sl-block" data-block-type="text" style="height: auto; width: 480px; left: 0px; top: 0px;" data-name="text-685d4e" data-block-id="bd167cd8af55659433f4081d6c00ca14"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h2>server-side xrd</h2>
+</div></div>
+
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 220px; left: 0px; top: 651px;" data-name="text-bad6e2" data-block-id="a0d602e84aa9955aa30688cbfcb51ee2"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>#roedunet #december2020</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 249px; left: 700.5px; top: 651px;" data-name="text-3f5367" data-block-id="9b3aab7379c56c7d8db9e2174910e1e9"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>Robert Poenaru | DFCTI @ IFIN-HH</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 538.724px; left: 23px; top: 112px;" data-name="text-d71976" data-block-id="c561dd704e3fd3848d50a831ce502713">
+<div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13; text-align: left;" dir="ui">
+<ul>
+	<li style="color:rgb(0, 0, 0)"><span class="s1">At its core, xrd-server acts like any remote data server.</span></li>
+	<li style="color:rgb(0, 0, 0)">
+<span class="s1">It is innovative in terms of:</span>
+	<ul>
+		<li style="color:rgb(0, 0, 0)"><span class="s1">its scalability</span></li>
+		<li style="color:rgb(0, 0, 0)"><span class="s1">robustness</span></li>
+		<li style="color:rgb(0, 0, 0)"><span class="s1">fault-tolerance</span></li>
+		<li style="color:rgb(0, 0, 0)"><span class="s1">job recovery (in case of job failing during an execution)</span></li>
+		<li style="color:rgb(0, 0, 0)"><span class="s1">cache mechanism</span></li>
+	</ul>
+	</li>
+</ul>
+</div>
+<grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension><grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension>
+</div>
+<div class="sl-block" data-block-type="image" style="width: 371.276px; height: 518px; left: 561.724px; top: 74px; min-width: 1px; min-height: 1px;" data-name="image-32c6ab" data-block-id="3a01d53a205c2c9f146dc99f87599cec"><div class="sl-block-content" style="z-index: 14;"><img style="" data-natural-width="291" data-natural-height="406" data-lazy-loaded="" data-src="deck-344bb1/d63e2988b437de48bfc512bc53c9c87b.png"></div></div></section><section data-id="410197f1da33379de8b434b2a2e4bdd3"><div class="sl-block" data-block-type="text" style="height: auto; width: 869px; left: 3px; top: 10px;" data-name="text-685d4e" data-block-id="9cb3b8f05ccbabbfac4adcb1aeaef2ab"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; line-height: 1.014;" data-has-line-height="">
+<h3>server-side xrd: workflow for file access</h3>
+</div></div>
+
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 220px; left: 0px; top: 651px;" data-name="text-bad6e2" data-block-id="bcb58ad43b3b814186cb17220a5950bb"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>#roedunet #december2020</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 249px; left: 700.5px; top: 651px;" data-name="text-3f5367" data-block-id="cb3116565feebc66f87db32625665bcf"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>Robert Poenaru | DFCTI @ IFIN-HH</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 910px; left: 25px; top: 69px;" data-name="text-bb2ddd" data-block-id="bc7850d355707eda73e3dc2355334ae7">
+<div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13; text-align: left;" dir="ui">
+<ul>
+	<li>
+<span class="s1">The client contacts a centralized endpoint with a request to open a file.</span>
+	<ul>
+		<li><span style="font-size:0.9em"><span class="s1">This Xrootd server called a <em>redirector </em>is connected to a daemon: Cluster Management Service Daemon (<em>cmsd</em>).</span></span></li>
+		<li><span style="font-size:0.9em"><span class="s1">The redirector’s <em>xrootd </em>daemon queries<em> </em>for a file’s location</span></span></li>
+		<li><span style="font-size:0.9em"><span class="s1"><span class="s1">If the location is not known in the local memory cache, the <em>cmsd </em>will subsequently query all sites (storage facilities) subscribed to the redirector.</span></span></span></li>
+	</ul>
+	</li>
+</ul>
+</div>
+<grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 13;" class="cGcvT"></grammarly-extension><grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension><grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension>
+</div>
+<div class="sl-block" data-block-type="image" style="width: 647.813px; height: 285.945px; left: 301.687px; top: 356px; min-width: 1px; min-height: 1px;" data-name="image-d9f3bd" data-block-id="f28ef5c8a31823329668fb53e00db419"><div class="sl-block-content" style="z-index: 14;"><img style="" data-natural-width="1314" data-natural-height="580" data-lazy-loaded="" data-src="deck-344bb1/ab7da41d439a54ebd646a5db24357b26.png"></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 600px; left: 320px; top: 626.945px;" data-name="text-7b427c" data-block-id="79a6b89660e7e8b84aef78a59a33acdd"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15; font-size: 49%;">
+<p style="text-align:left"><em>Bauerdick, L., et al. "Using xrootd to federate regional storage." Journal of Physics: Conference Series. Vol. 396. No. 4. IOP Publishing, 2012.</em></p>
+</div></div></section><section data-id="a9d8a72c95c39a04f94b3e9ec3da107b"><div class="sl-block" data-block-type="text" style="height: auto; width: 320px; left: 0px; top: 0px;" data-name="text-685d4e" data-block-id="d02518b2280dc6f8b6ae7669923884ee"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h2>xrd client</h2>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 926.5px; left: 23px; top: 74px;" data-name="text-d71976" data-block-id="fdd980c8b79c79969fa27be09ac53146">
+<div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; text-align: left; line-height: 1.729; font-size: 85%;" data-has-line-height="" dir="ui">
+<ul>
+	<li>
+	<p>The implementation that allows users to store, retrieve, and edit remote data (i.e., root files) that are located remotely on the storage grid at CERN.</p>
+	</li>
+	<li>
+	<p>Developed in C++:</p>
+
+	<ul>
+		<li>
+		<p>Newer versions of the XRootD framework support <em>Python Bindings.</em></p>
+		</li>
+		<li>
+		<p>Most important APIs: File and FileSystem</p>
+		</li>
+		<li>
+		<p><span style="color:rgb(0, 0, 0); font-size:25.5px">Shortly named </span><strong>XrdCl.</strong></p>
+		</li>
+	</ul>
+	</li>
+</ul>
+</div>
+<grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension><grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension>
+</div>
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 220px; left: 0px; top: 651px;" data-name="text-bad6e2" data-block-id="235e9af174ca7d6b4cf312c26db98de2"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>#roedunet #december2020</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 249px; left: 700.5px; top: 651px;" data-name="text-3f5367" data-block-id="d2c9c265563f913158eefecd173cb788"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>Robert Poenaru | DFCTI @ IFIN-HH</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 602.739px; height: 337.387px; left: 357.261px; top: 313.613px; min-width: 1px; min-height: 1px;" data-name="image-a8ab0e" data-block-id="153ceeeb32377bd4eba8f65a97d82f6c"><div class="sl-block-content" style="z-index: 14;"><img style="" data-natural-width="1640" data-natural-height="918" data-lazy-loaded="" data-src="deck-344bb1/362523c081db422b120b95587d0c1eca.png"></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 216px; left: 174px; top: 499px;" data-name="text-ff9473" data-block-id="1b3aed8fdbecda59c5d5aae037c34681"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15; font-size: 70%;">
+<p><em>Architecture overview of the xrd client</em></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 415px; left: 380px; top: 636px;" data-block-id="df7309a074b436ce793e1a7da0b19835" data-name="text-d26edc"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 16; font-size: 39%;">
+<p style="color:rgb(26, 26, 26); text-align:start"><em><span class="s1">Dorigo, Alvise, et al. "XROOTD-A Highly scalable architecture for data access." WSEAS Transactions on Computers 1.4.3 (2005): 348-353.</span></em></p>
+</div></div></section><section data-id="cd4b1a666d76770566bad5893f2e7cc9"><div class="sl-block" data-block-type="text" style="height: auto; width: 320px; left: 0px; top: 0px;" data-name="text-685d4e" data-block-id="f049d8abc24e77c9bbc77059bf1816be"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h2>xrd client</h2>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 926.5px; left: 23px; top: 91px;" data-name="text-d71976" data-block-id="3f43ebcb9d7fe5fc57ab3e312d38464e">
+<div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; text-align: left; line-height: 1.729; font-size: 85%;" data-has-line-height="" dir="ui">
+<ul>
+	<li>
+	<p style="color:rgb(0, 0, 0)"><span class="s1">The <strong>client</strong> is composed of three layers:</span></p>
+
+	<ul>
+		<li>
+<span class="s1">the <strong>interface </strong>layer (</span>methods dealing with <span class="s1">file access are defined)</span>
+</li>
+		<li><span class="s1">the <strong>high-level</strong> communication layer (policies related to fault tolerance, read caching)</span></li>
+		<li>
+<span class="s1">the <strong>low-level</strong> communication layer: </span>
+		<ul>
+			<li><span class="s1">allows for connection multiplexing</span></li>
+			<li><span class="s1">synchronous/asynchronous communication with the xrd server</span></li>
+			<li><span class="s1">socket error handling</span></li>
+			<li>takes care of <span class="s1">like read/write, socket polling to handle read/write timeouts, connection, and disconnection</span>
+</li>
+			<li><span class="s1">detects connection timeouts</span></li>
+		</ul>
+		</li>
+	</ul>
+	</li>
+</ul>
+</div>
+<grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension><grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension><grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension>
+</div>
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 220px; left: 0px; top: 651px;" data-name="text-bad6e2" data-block-id="7a06263622b045b0417b4502a6e226de"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>#roedunet #december2020</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 249px; left: 700.5px; top: 651px;" data-name="text-3f5367" data-block-id="cb4ac27ae18c95bbcbaa02503290d7e6"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>Robert Poenaru | DFCTI @ IFIN-HH</em></span></span></p>
+</div></div></section><section data-id="eb9c9aa481d773b3bf0885dcdeeaacdc"><div class="sl-block" data-block-type="text" style="height: auto; width: 320px; left: 0px; top: 0px;" data-name="text-685d4e" data-block-id="6ba5cc224e148d8978f80bfaab81d8e4"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h2>xrd client</h2>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 926.5px; left: 23px; top: 92px;" data-name="text-d71976" data-block-id="ce23e24f67a79055e11dcb9e52f67ebb">
+<div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; text-align: left; line-height: 1.729; font-size: 85%;" data-has-line-height="" dir="ui">
+<ul>
+	<li>
+	<p>Within a workflow that involves file accessing, the client provides two main APIs:</p>
+
+	<ul>
+		<li>
+		<p>XrdCl::File</p>
+		</li>
+		<li>
+		<p>XrdCl::FileSystem</p>
+		</li>
+	</ul>
+	</li>
+	<li>
+	<p>Both APIs are implemented in C++, with sync/async implementations</p>
+	</li>
+	<li>
+	<p>List of operations (specific to each class of APIs)</p>
+
+	<ul>
+		<li>
+		<p>File: Open(),Read(),Write(),Close(),Truncate(),VectorRead(),VectorWrite() and so on.</p>
+		</li>
+		<li>
+		<p>File-System:  Locate(), Mv(), Truncate(), Rm(), Mkdir(), RmDir() and so on.</p>
+		</li>
+	</ul>
+	</li>
+	<li style="text-align:start"><span class="s1">Each operation has a well defined set of arguments</span></li>
+</ul>
+</div>
+<grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension><grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension>
+</div>
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 220px; left: 0px; top: 651px;" data-name="text-bad6e2" data-block-id="45df3a4b6c8ecddf07e975330ee20338"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>#roedunet #december2020</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 249px; left: 700.5px; top: 651px;" data-name="text-3f5367" data-block-id="e0c96ecd2772f58bbf2e75f8dbe3e60e"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>Robert Poenaru | DFCTI @ IFIN-HH</em></span></span></p>
+</div></div></section><section data-id="d1d7bc357b55ae336f62288d25d27d87"><div class="sl-block" data-block-type="text" style="height: auto; width: 533px; left: 0px; top: 2px;" data-name="text-685d4e" data-block-id="6b40a8efd6d13dc3a9868fdf4950d79a"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h2>sync vs. async</h2>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 926.5px; left: 23px; top: 76px;" data-name="text-d71976" data-block-id="31f0ec4557ce7693f7350734c298efbf">
+<div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; text-align: left; line-height: 1.729; font-size: 85%;" data-has-line-height="" dir="ui">
+<ul>
+	<li>
+	<p><span class="s1">Two versions implemented in the standard API for File and FileSystem functions:</span></p>
+
+	<ul>
+		<li>
+		<p><span class="s1">synchronous</span></p>
+		</li>
+		<li>
+		<p><span class="s1">asynchronous</span></p>
+		</li>
+	</ul>
+	</li>
+	<li>
+	<p><span class="s1">The main difference from the API perspective: asynchronous functions take one more argument (i.e., the <em>handler object).</em></span></p>
+	</li>
+</ul>
+</div>
+<grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension><grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension>
+</div>
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 220px; left: 0px; top: 651px;" data-name="text-bad6e2" data-block-id="74a1a74794aae1a39c993ee25062e4a7"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>#roedunet #december2020</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 249px; left: 700.5px; top: 651px;" data-name="text-3f5367" data-block-id="820156700bc9cb97688e9dd922137451"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>Robert Poenaru | DFCTI @ IFIN-HH</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 583.983px; height: 115.527px; left: 348.009px; top: 366px; min-width: 1px; min-height: 1px;" data-name="image-0f18b4" data-block-id="7d11f90ce43a35ed32aa0514802b88a4"><div class="sl-block-content" style="z-index: 14; border-style: solid; border-width: 1px; border-color: rgb(0, 0, 255);"><img style="" data-natural-width="920" data-natural-height="182" data-lazy-loaded="" data-src="deck-344bb1/30639170b1bdf232eec09f4043d3368d.png"></div></div>
+<div class="sl-block" data-block-type="image" style="width: 617.45px; height: 133.15px; left: 320px; top: 493.425px; min-width: 1px; min-height: 1px;" data-name="image-c8f407" data-block-id="7e63c20659c90fbde35a9a098b87de7a"><div class="sl-block-content" style="z-index: 15; border-style: solid; border-width: 1px; border-color: rgb(204, 0, 0);"><img style="" data-natural-width="946" data-natural-height="204" data-lazy-loaded="" data-src="deck-344bb1/7711ff004bdd2edfe1a5b22093d374d2.png"></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 225px; left: 95px; top: 384.764px;" data-name="text-732f0e" data-block-id="b5907595ad8be8b27f3a084f2cc5f436"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 16; border-style: solid; border-width: 1px; border-color: rgb(0, 0, 255);">
+<p>sync Write() function</p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 283px; left: 18.5px; top: 527px;" data-block-id="b1c812292ab751441e73b2ef1dd3e426" data-name="text-da5202"><div class="sl-block-style" style="z-index: 17; transform: rotate(0deg);"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 17; border-style: solid; border-width: 1px; border-color: rgb(255, 0, 0);">
+<p>async Write() function</p>
+</div></div></div></section><section data-id="f546fa0d06bc29141ce626d68f2828de"><div class="sl-block" data-block-type="text" style="height: auto; width: 819px; left: 0px; top: 2px;" data-name="text-685d4e" data-block-id="2c1746aee0221e324384a0d612eb72cc"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h3>async within the standard xrd client API</h3>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 926.5px; left: 16.75px; top: 89px;" data-name="text-d71976" data-block-id="282dc740fb7f4e03730ccfd8c151bc6f">
+<div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; text-align: left; font-size: 85%; line-height: 1.339;" dir="ui" data-has-line-height="">
+<ul>
+	<li>
+	<p>For a simple workflow involving file-based operations, one can consider the following operation pipeline:</p>
+
+	<ul>
+		<li>
+		<p>Opening a file</p>
+		</li>
+		<li>
+		<p>Read file content</p>
+		</li>
+		<li>
+		<p>Close the file</p>
+		</li>
+	</ul>
+	</li>
+	<li>
+	<p style="color:rgb(0, 0, 0)"><span class="s1">For a proper execution flow, each next function needs to be called from the previous function’s handler.</span></p>
+	</li>
+	<li>
+	<p style="color:rgb(0, 0, 0)"><span class="s1">At first <em><strong>Open</strong> </em>operation is called -&gt; Inside the handler, the second operation (<strong><em>Read</em></strong>) is called with another handler -&gt; third operation (<strong><em>Close</em></strong>) is called. </span></p>
+	</li>
+</ul>
+</div>
+<grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension><grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension><grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension>
+</div>
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 220px; left: 0px; top: 651px;" data-name="text-bad6e2" data-block-id="07445e5842823f64596f5f58335b17a5"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>#roedunet #december2020</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 249px; left: 700.5px; top: 651px;" data-name="text-3f5367" data-block-id="78913a2cd229e6b466e6f4eecdc8917a"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>Robert Poenaru | DFCTI @ IFIN-HH</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 839.5px; height: 160.824px; left: 67px; top: 469.176px; min-width: 1px; min-height: 1px;" data-name="image-e5d3d4" data-block-id="01bdc591534e85ee01cdb37e9cd11bc9"><div class="sl-block-content" style="z-index: 14; border-style: solid; border-width: 1px; border-color: rgb(255, 153, 0);"><img style="" data-natural-width="1566" data-natural-height="300" data-lazy-loaded="" data-src="deck-344bb1/223c960ea63e65569acc7fac99158922.png"></div></div></section><section data-id="b98a987c8858b29aab0f8fa889ca381d"><div class="sl-block" data-block-type="text" style="height: auto; width: 819px; left: 0px; top: 2px;" data-name="text-685d4e" data-block-id="947c7ed9d12e55c7cd41687307b81fa7"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h3>async within the standard xrd client API</h3>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 768.5px; left: 80px; top: 134px;" data-name="text-d71976" data-block-id="98c5f9cfb86ee23f7f32cdb0734ac10b">
+<div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; text-align: center; font-size: 85%; line-height: 1.339; border-style: solid; border-width: 1px; border-color: rgb(168, 39, 107);" dir="ui" data-has-line-height="">
+<p><span class="s1">Each operation call requires different arguments</span></p>
+</div>
+<grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension><grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension><grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension>
+</div>
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 220px; left: 0px; top: 651px;" data-name="text-bad6e2" data-block-id="acebdbbd5fef01350e16bdd99c5cab8f"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>#roedunet #december2020</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 249px; left: 700.5px; top: 651px;" data-name="text-3f5367" data-block-id="30da053c72995c916ec48dc97ad6f9fa"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>Robert Poenaru | DFCTI @ IFIN-HH</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 363px; left: 80px; top: 210px;" data-name="text-36c15e" data-block-id="02896ce6488bf7b1e681f9a7bf3e9de3"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14; border-style: solid; border-width: 1px; border-color: rgb(0, 0, 255); text-align: center;">
+<p><span style="color:rgb(0, 0, 0); font-size:25.5px; text-align:left">Each handler needs to have different implementation.</span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 382px; left: 466.5px; top: 210px;" data-block-id="f75762b13409ebb72f17c0f49d804999" data-name="text-df1df8"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15; border-style: solid; border-width: 1px; border-color: rgb(0, 0, 255); text-align: center;">
+<p><span style="color:rgb(0, 0, 0); font-size:25.5px; text-align:left"> Each handler user needs to define separate class.</span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 768.5px; left: 80px; top: 362.5px;" data-name="text-d0d1fe" data-block-id="ded384dd272fd56b3816384e799ebb84"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 16; border-style: solid; border-width: 1px; text-align: center; border-color: rgb(255, 0, 0);">
+<p><span style="color:rgb(0, 0, 0); font-size:25.5px; text-align:left">In each handler, the operation status needs to be checked and potential errors should be handled</span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 768.5px; left: 80px; top: 490px;" data-name="text-7aee08" data-block-id="81bedd8b0d511db0c83d2d4ea71ad33d"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 17;">
+<p style="text-align:justify"><strong><span style="font-size:25.5px; text-align:left">⚠️</span><span style="color:rgb(0, 0, 0); font-size:25.5px; text-align:left"> This process becomes even more difficult in case of more complex flow including parallel operations</span></strong></p>
+</div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 0px; min-height: 0px; left: 143px; top: 305.5px;" data-name="line-6decc7" data-block-id="2cd08b99c855876f6927e10d77385f5f"><div class="sl-block-content" data-line-x1="0" data-line-y1="0" data-line-x2="0" data-line-y2="56.5" data-line-color="#000000" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 18;" data-line-width="11px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="56.5" viewbox="0 0 1 56.5"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="0.5" y1="0.5" x2="0.5" y2="40.5"></line><line class="line-element" stroke="#000000" stroke-width="11" x1="0.5" y1="0.5" x2="0.5" y2="40.5"></line><polygon fill="#000000" transform="translate(0,40) rotate(180)" points="0,-16.5 16.5,16.5 -16.5,16.5"></polygon></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 0px; min-height: 0px; left: 143px; top: 152px;" data-block-id="87f8a537018808227f6db390d6aa3674" data-name="line-6ddf97"><div class="sl-block-content" data-line-x1="0" data-line-y1="0" data-line-x2="0" data-line-y2="56.5" data-line-color="#000000" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 19;" data-line-width="11px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="56.5" viewbox="0 0 1 56.5"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="0.5" y1="0.5" x2="0.5" y2="40.5"></line><line class="line-element" stroke="#000000" stroke-width="11" x1="0.5" y1="0.5" x2="0.5" y2="40.5"></line><polygon fill="#000000" transform="translate(0,40) rotate(180)" points="0,-16.5 16.5,16.5 -16.5,16.5"></polygon></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 0px; min-height: 0px; left: 409.5px; top: 258px;" data-block-id="2b4d77fc2d72e08e31d8262f3ff0c3e2" data-name="line-53736e"><div class="sl-block-content" data-line-x1="0" data-line-y1="0" data-line-x2="83" data-line-y2="0" data-line-color="#000000" data-line-start-type="arrow" data-line-end-type="arrow" style="z-index: 20;" data-line-width="11px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="83" height="1" viewbox="0 0 83 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="17" y1="0.5" x2="70.28012048192771" y2="0.5"></line><line class="line-element" stroke="#000000" stroke-width="11" x1="17" y1="0.5" x2="70.28012048192771" y2="0.5"></line><polygon fill="#000000" transform="translate(16.5,0) rotate(90)" points="0,16.5 16.5,-16.5 -16.5,-16.5"></polygon><polygon fill="#000000" transform="translate(69.78012048192771,0) rotate(90)" points="0,-16.5 16.5,16.5 -16.5,16.5"></polygon></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 580.75px; left: 0.5px; top: 64px;" data-name="text-15dcce" data-block-id="d1c31675554a9290ab6be66d0e8e11ea"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 21;">
+<p>Drawback nr1 -  code complexity</p>
+</div></div></section><section data-id="b657d7d238d8f275371023bcef702400">
+
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 220px; left: 0px; top: 651px;" data-name="text-bad6e2" data-block-id="7113610921f9d5597f954ac58d26a88c"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>#roedunet #december2020</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 249px; left: 700.5px; top: 651px;" data-name="text-3f5367" data-block-id="a6567538b3efaa28b390ccd3c24cd723"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>Robert Poenaru | DFCTI @ IFIN-HH</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 819px; left: 0px; top: 2px;" data-name="text-685d4e" data-block-id="e457cf8d36703a4d1368dce2e282a4ae"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+<h3>async within the standard xrd client API</h3>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 936.5px; left: 13px; top: 124.5px;" data-name="text-f566d0" data-block-id="dfd6f1a201539bb0e90f2792ec818454"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13; font-size: 85%;">
+<ul>
+	<li style="color:rgb(0, 0, 0); text-align:start"><span class="s1">Only the first function call can be seen in the "chain" of operations.</span></li>
+	<li style="color:rgb(0, 0, 0); text-align:start"><span class="s1">Further execution is done in the handler.</span></li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 580.75px; left: 0.5px; top: 64px;" data-name="text-15dcce" data-block-id="afa246fe5064d3fca4683e8105bda628"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14;">
+<p>Drawback nr2 -  code readability</p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 908.5px; left: 41px; top: 257px;" data-name="text-1fe05a" data-block-id="3cbb99fbde1fa48f1f2296fab9429750"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15; font-size: 85%; text-align: left;">
+<ul>
+	<li><span class="s1">To understand the entire execution flow, the user would need to go through a whole set of handlers what can be very inconvenient and time-consuming.</span></li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 0px; min-height: 0px; left: 136px; top: 194.5px;" data-name="line-6ddf97" data-block-id="838affb133c178c5003ab50688379d8f"><div class="sl-block-content" data-line-x1="0" data-line-y1="0" data-line-x2="0" data-line-y2="56.5" data-line-color="#000000" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 16;" data-line-width="11px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="56.5" viewbox="0 0 1 56.5"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="0.5" y1="0.5" x2="0.5" y2="40.5"></line><line class="line-element" stroke="#000000" stroke-width="11" x1="0.5" y1="0.5" x2="0.5" y2="40.5"></line><polygon fill="#000000" transform="translate(0,40) rotate(180)" points="0,-16.5 16.5,16.5 -16.5,16.5"></polygon></svg></div></div>
+<div class="sl-block" data-block-type="image" style="width: 839.5px; height: 160.824px; left: 61.5px; top: 479.588px; min-width: 1px; min-height: 1px;" data-name="image-e5d3d4" data-block-id="c7d3a1eb78568c878f0611336ece6aa2"><div class="sl-block-content" style="z-index: 17; border-style: solid; border-width: 1px; border-color: rgb(255, 153, 0);"><img style="" data-natural-width="1566" data-natural-height="300" data-lazy-loaded="" data-src="deck-344bb1/223c960ea63e65569acc7fac99158922.png"></div></div>
+<div class="sl-block" data-block-type="shape" style="width: 135.25px; height: 38.412px; left: 332.375px; top: 602px;" data-name="shape-31f61a" data-block-id="eb67fffbe11cd8e51254dd8eb9e33d35"><div class="sl-block-style" style="z-index: 18; opacity: 0.41;"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgb(147, 196, 125)" data-shape-stretch="true" style="z-index: 18;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 135 38"><rect width="135.25" height="38.412" rx="0" ry="0" class="shape-element" fill="rgb(147, 196, 125)"></rect></svg></div></div></div>
+<div class="sl-block" data-block-type="image" style="width: 295.395px; height: 259px; left: 640px; top: 342px; min-width: 1px; min-height: 1px;" data-name="image-13ba58" data-block-id="9ecccc7f2dfff35ac4ee6aaf6e90a78e"><div class="sl-block-content" style="z-index: 19;"><img style="" data-natural-width="349" data-natural-height="306" data-lazy-loaded="" data-src="deck-344bb1/ef794780c325e5cbaca896c6db6d3341.png"></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 908.5px; left: 41px; top: 402.5px;" data-block-id="14ba41beeee892434b1f676920dea25f" data-name="text-57ccc7"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 20; font-size: 90%; text-align: left;">
+<ul>
+	<li><strong><span class="s1">⚠️ Even worse in the case of parallel execution</span></strong></li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 0px; min-height: 0px; left: 247px; top: 335.5px;" data-block-id="90f4a89a04774fff6657e74c26cdca05" data-name="line-d40ba7"><div class="sl-block-content" data-line-x1="0" data-line-y1="0" data-line-x2="0" data-line-y2="56.5" data-line-color="#000000" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 21;" data-line-width="11px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="56.5" viewbox="0 0 1 56.5"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="0.5" y1="0.5" x2="0.5" y2="40.5"></line><line class="line-element" stroke="#000000" stroke-width="11" x1="0.5" y1="0.5" x2="0.5" y2="40.5"></line><polygon fill="#000000" transform="translate(0,40) rotate(180)" points="0,-16.5 16.5,16.5 -16.5,16.5"></polygon></svg></div></div></section><section data-id="1a898ccdacccaa41059b976678ee2b4e"><div class="sl-block" data-block-type="text" style="height: auto; width: 939px; left: 0px; top: 2px;" data-name="text-685d4e" data-block-id="45f542f3f8cfcfbb717046f0b401958c"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h2>xrd client -&gt; <span style="color:rgb(0, 0, 0)">C++ Declarative API</span>
+</h2>
+
+<p><span style="color:rgb(0, 0, 0)">🚀 </span>NEW ALTERNATIVE</p>
+</div></div>
+
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 220px; left: 0px; top: 651px;" data-name="text-bad6e2" data-block-id="92aa930afcf928a461f00b117aa50dd7"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>#roedunet #december2020</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 249px; left: 700.5px; top: 651px;" data-name="text-3f5367" data-block-id="b4e7b1a2dbdc917f0de7996a093e1c7b"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>Robert Poenaru | DFCTI @ IFIN-HH</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 898px; left: 31px; top: 242px;" data-name="text-4d1731" data-block-id="ba267b7831fdc3b6f153f1beafc669cc"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;">
+<ul>
+	<li style="color:rgb(0, 0, 0); text-align:justify"><span class="s1">Allows File and FileSystem operations.</span></li>
+	<li style="color:rgb(0, 0, 0); text-align:justify">
+<span class="s1">Its sole focus is on facilitating:</span>
+	<ul>
+		<li style="color:rgb(0, 0, 0); text-align:justify"><span class="s1">the asynchronous programming model</span></li>
+		<li style="color:rgb(0, 0, 0); text-align:justify"><span class="s1">chaining of operations</span></li>
+	</ul>
+	</li>
+	<li style="color:rgb(0, 0, 0); text-align:justify">​D<span class="s1">esigned to be more in line with modern C++ programming practices (e.g., lambdas, futures, packaged tasks).</span>
+</li>
+	<li style="color:rgb(0, 0, 0); text-align:justify"><span class="s1">The syntax was created through the usage of the <em>operator overloading </em>feature utility available in C++.</span></li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 788px; left: 86px; top: 140px;" data-name="text-70fdff" data-block-id="e5351126136f4ca612172aca716862f8"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14;">
+<p style="text-align:left"><span style="color:rgb(0, 0, 0); text-align:left">⚙️ </span><em>Developed as a potential tool which might mitigate the standard API drawbacks</em></p>
+</div></div></section><section data-id="c13fefe79c74ff21a173a1edadf145b2"><div class="sl-block" data-block-type="text" style="height: auto; width: 486.25px; left: 0px; top: 2px;" data-name="text-685d4e" data-block-id="b61298f2f7317debae2cd620e7a771bb"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h2>Declarative API</h2>
+</div></div>
+
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 220px; left: 0px; top: 651px;" data-name="text-bad6e2" data-block-id="ca1d7ecaa67e5efe0fdde3e03b927412"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>#roedunet #december2020</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 249px; left: 700.5px; top: 651px;" data-name="text-3f5367" data-block-id="26a58f1914d174c6636a73621ddc756b"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>Robert Poenaru | DFCTI @ IFIN-HH</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 645.903px; height: 225.365px; left: 282.8px; top: 116px; min-width: 1px; min-height: 1px;" data-name="image-5c1034" data-block-id="8673e711012e712be9e322fb94290924"><div class="sl-block-content" style="z-index: 13; border-style: solid; border-width: 1px; border-color: rgb(255, 153, 0);"><img style="" data-natural-width="1198" data-natural-height="418" data-lazy-loaded="" data-src="deck-344bb1/7a0545680dda6320c668fe4b086ddf1d.png"></div></div>
+<div class="sl-block" data-block-type="image" style="width: 645.903px; height: 97.2814px; left: 282.8px; top: 376px; min-width: 1px; min-height: 1px;" data-name="image-190990" data-block-id="df281045271fe34c2742a7d1eb6c5a5c"><div class="sl-block-content" style="z-index: 14; border-style: solid; border-width: 1px; border-color: rgb(74, 134, 232);"><img style="" data-natural-width="1142" data-natural-height="172" data-lazy-loaded="" data-src="deck-344bb1/25fa9b5dc9ff502eca03f24bc2023bac.png"></div></div>
+<div class="sl-block" data-block-type="image" style="width: 649.903px; height: 61.5175px; left: 278.8px; top: 523.669px; min-width: 1px; min-height: 1px;" data-name="image-9772a1" data-block-id="d51d5f221516c95b610b1d5ab3abc14b"><div class="sl-block-content" style="z-index: 15; border-style: solid; border-width: 1px; border-color: rgb(168, 39, 107);"><img style="" data-natural-width="1310" data-natural-height="124" data-lazy-loaded="" data-src="deck-344bb1/153349ecd0708645413b478e73d5033f.png"></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 272.594px; left: 6.206px; top: 194.183px;" data-name="text-d0bf7b" data-block-id="4a2cd1fee8dadde54387eeee76cb3a91"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 16; font-size: 60%; text-align: justify; border-style: solid; border-width: 1px; border-color: rgb(255, 153, 0);">
+<p style="color: rgb(0, 0, 0);"><span class="s1"><strong>Pipeline</strong>: a class that can wrap any kind of operation (including compound operations).</span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 270.8px; left: 8px; top: 390px;" data-name="text-306d9a" data-block-id="9428e3b8a466e9a659c3a1bdd904ec78"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 17; font-size: 60%; text-align: justify; border-style: solid; border-width: 1px; border-color: rgb(74, 134, 232);">
+<p style="color:rgb(0, 0, 0); text-align:start"><span class="s1"><strong>Async</strong>: utility for <em>asynchronous</em> execution of pipelines. </span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 264.206px; left: 8px; top: 529.5px;" data-name="text-ff8fbd" data-block-id="f6043a50cd30eed2a66302b7d65a32e3"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 18; font-size: 60%; text-align: justify; border-style: solid; border-width: 1px; border-color: rgb(168, 39, 107);">
+<p style="color:rgb(0, 0, 0); text-align:start"><span class="s1"><strong>WaitFor</strong>: utility for <em>synchronous</em> execution of pipelines. </span></p>
+</div></div></section><section data-id="4f64a048c68ce6b87c7fec617838fec2"><div class="sl-block" data-block-type="text" style="height: auto; width: 486.25px; left: 0px; top: 2px;" data-name="text-685d4e" data-block-id="a5198d397282357142149326f082162b"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h2>Declarative API</h2>
+</div></div>
+
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 220px; left: 0px; top: 651px;" data-name="text-bad6e2" data-block-id="a5c223daabc147dfb694d388db193e84"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>#roedunet #december2020</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 249px; left: 700.5px; top: 651px;" data-name="text-3f5367" data-block-id="2338838bd158108a206aaac06c838db3"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>Robert Poenaru | DFCTI @ IFIN-HH</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 840.793px; height: 293.365px; left: 54.597px; top: 90px; min-width: 1px; min-height: 1px;" data-name="image-5c1034" data-block-id="312548f732d3cefc4063c3467a2245cd"><div class="sl-block-content" style="z-index: 13; border-style: solid; border-width: 1px; border-color: rgb(255, 153, 0);"><img style="" data-natural-width="1198" data-natural-height="418" data-lazy-loaded="" data-src="deck-344bb1/7a0545680dda6320c668fe4b086ddf1d.png"></div></div>
+<div class="sl-block" data-block-type="shape" style="width: 44px; height: 76px; left: 243.125px; top: 246px;" data-name="shape-74aba7" data-block-id="9f2da4bb8548d55686a8f01c8d125bd9"><div class="sl-block-style" style="z-index: 14; opacity: 0.51;"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgb(106, 168, 79)" data-shape-stretch="true" style="z-index: 14;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 44 76"><rect width="44" height="76" rx="0" ry="0" class="shape-element" fill="rgb(106, 168, 79)"></rect></svg></div></div></div>
+<div class="sl-block" data-block-type="shape" style="width: 50px; height: 38px; left: 755px; top: 249px;" data-block-id="766cd47a1a4fd4e66ace4227520d2234" data-name="shape-1a9ae1"><div class="sl-block-style" style="z-index: 15; opacity: 0.51;"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgb(60, 120, 216)" data-shape-stretch="true" style="z-index: 15;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 50 38"><rect width="50" height="38" rx="0" ry="0" class="shape-element" fill="rgb(60, 120, 216)"></rect></svg></div></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 391.594px; left: 54.597px; top: 411.5px;" data-block-id="ae571a21fdec2622c5f5ff6f5c0d1eb1" data-name="text-f435ae">
+<div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 16; font-size: 60%; text-align: justify; border-width: 1px; border-color: rgb(255, 153, 0); background-color: rgba(106, 168, 79, 0.51); padding: 6px;">
+<p style="color: rgb(0, 0, 0); text-align: center;"><strong>The pipe "|" operator is overloaded: defines pipelined operations (each function call will be executed in order)</strong></p>
+</div>
+<grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 17;" class="cGcvT"></grammarly-extension>
+</div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 0px; min-height: 0px; left: 236.125px; top: 322px;" data-name="line-4ef8cc" data-block-id="19f6885156b95facccd53e88f7f68b2d"><div class="sl-block-content" data-line-x1="0" data-line-y1="89.5" data-line-x2="22" data-line-y2="0" data-line-color="#ff9900" data-line-start-type="arrow" data-line-end-type="none" style="z-index: 17;" data-line-width="6px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="22" height="89.5" viewbox="0 0 22 89.5"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="2.148338299171059" y1="80.76016919200865" x2="22" y2="0"></line><line class="line-element" stroke="#ff9900" stroke-width="6" x1="2.148338299171059" y1="80.76016919200865" x2="22" y2="0"></line><polygon fill="#ff9900" transform="translate(2.148338299171059,80.76016919200865) rotate(13.81)" points="0,9 9,-9 -9,-9"></polygon></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 0px; min-height: 0px; left: 744px; top: 287px;" data-block-id="e59ef656733d389763fa6f349f82b12a" data-name="line-05f2e2"><div class="sl-block-content" data-line-x1="0" data-line-y1="124.5" data-line-x2="36" data-line-y2="0" data-line-color="#ff9900" data-line-start-type="arrow" data-line-end-type="none" style="z-index: 18;" data-line-width="6px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="36" height="124.5" viewbox="0 0 36 124.5"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="2.4999933020673835" y1="115.8541898303503" x2="36" y2="0"></line><line class="line-element" stroke="#ff9900" stroke-width="6" x1="2.4999933020673835" y1="115.8541898303503" x2="36" y2="0"></line><polygon fill="#ff9900" transform="translate(2.4999933020673835,115.8541898303503) rotate(16.128)" points="0,9 9,-9 -9,-9"></polygon></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 420.397px; left: 474.993px; top: 411.5px;" data-block-id="66903743cd64953dd3b3a59e8d1ac0d5" data-name="text-4dfc9f">
+<div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 19; font-size: 60%; text-align: justify; border-width: 1px; border-color: rgb(255, 153, 0); background-color: rgba(60, 120, 216, 0.51); padding: 6px;">
+<p style="color: rgb(0, 0, 0); text-align: center;"><strong>The operator "&gt;&gt;" is overloaded: <span class="s1">provides a custom handler for the given operation.</span></strong></p>
+
+<p style="color: rgb(0, 0, 0); text-align: center;"><strong><span class="s1">⚠️ The handler is optional (the pipeline will stop in case of occurring errors throughout the execution).</span></strong></p>
+</div>
+<grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 17;" class="cGcvT"></grammarly-extension>
+</div></section><section data-id="0ce7d2d8ac751b7794ce1ae3ddf06bc7"><div class="sl-block" data-block-type="text" style="height: auto; width: 486.25px; left: 0px; top: 2px;" data-name="text-685d4e" data-block-id="91bfb05e5534b48eb162f16132e68f16"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h2>Declarative API</h2>
+</div></div>
+
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 220px; left: 0px; top: 651px;" data-name="text-bad6e2" data-block-id="345f9e37cb67c51b8713c6da7dd2af8f"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>#roedunet #december2020</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 249px; left: 700.5px; top: 651px;" data-name="text-3f5367" data-block-id="9c1bac943850f42084c5ef9fcdf72851"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>Robert Poenaru | DFCTI @ IFIN-HH</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 676.399px; height: 221.433px; left: 261.8px; top: 329.284px; min-width: 1px; min-height: 1px;" data-name="image-3f9e25" data-block-id="ceedb705df3e7bb90d824734a87674ae"><div class="sl-block-content" style="z-index: 13;"><img style="" data-natural-width="1118" data-natural-height="366" data-lazy-loaded="" data-src="deck-344bb1/8937223e8ba2ab011545afddb1175bfe.png"></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 868px; left: 46px; top: 94.5px;" data-name="text-3ceec6" data-block-id="db7a530e535a349c477b4743478ecc58"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14;">
+<ul>
+	<li style="color:rgb(0, 0, 0); text-align:justify">
+<span class="s1"><strong>XrdCl::Parallel</strong>: aggregates several operations (might be compound operations) for parallel execution.</span><span class="s1">​</span>
+	<ul>
+		<li style="text-align:justify"><span style="font-size:0.7em"><span class="s1">​E.g.: "o1" could be a compound operation like the previous one</span></span></li>
+	</ul>
+	</li>
+	<li style="color:rgb(0, 0, 0); text-align:justify"><span class="s1">As an argument: accepts a variable number of operations or a container of operations.</span></li>
+</ul>
+</div></div></section><section data-id="5dc9fb3e66a1f6b556fcfc288640a24c"><div class="sl-block" data-block-type="text" style="height: auto; width: 919px; left: 0px; top: 2px;" data-name="text-685d4e" data-block-id="9bc160c6541f0d940de13d15419ee7f0"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h2>Declarative API: a case study</h2>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 926.5px; left: 23px; top: 76px;" data-name="text-d71976" data-block-id="21556fd1ee7e32c6a63e9b80f9f46e36">
+<div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; text-align: left; line-height: 1.729; font-size: 85%;" data-has-line-height="" dir="ui">
+<ul>
+	<li>
+	<p>For testing that the newly developed API is indeed a more efficient tool in terms of the codebase <span style="color:rgb(0, 0, 0); font-size:25.5px">➡️</span> a special mechanism was implemented (as a plug-in for the client): <strong>Erasure Coding (EC)</strong></p>
+	</li>
+</ul>
+</div>
+<grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension><grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension>
+</div>
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 220px; left: 0px; top: 651px;" data-name="text-bad6e2" data-block-id="de11c78aab3b7b6491bebfbef7fa3186"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>#roedunet #december2020</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 249px; left: 700.5px; top: 651px;" data-name="text-3f5367" data-block-id="ee691c54119c641ee0960f7c93861084"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>Robert Poenaru | DFCTI @ IFIN-HH</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 926.5px; left: 23px; top: 214px;" data-name="text-89fe05" data-block-id="ceacfa8008bd85dff736c3b55214f916"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14; font-size: 85%;">
+<ul>
+	<li style="color:rgb(0, 0, 0); text-align:start">
+<span class="s1">EC is a method of data protection:</span>
+	<ul>
+		<li style="color:rgb(0, 0, 0); text-align:start"><span class="s1">data is broken into fragments, expanded and encoded with redundant data pieces</span></li>
+		<li style="color:rgb(0, 0, 0); text-align:start"><span class="s1">data is then stored across a set of different locations or storage media. </span></li>
+	</ul>
+	</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 806.4px; height: 151.121px; left: 73.602px; top: 506.44px; min-width: 1px; min-height: 1px;" data-name="image-253e45" data-block-id="d936b760fcf2faefb8e83040690d8b3f"><div class="sl-block-content" style="z-index: 15;"><img style="" data-natural-width="1270" data-natural-height="238" data-lazy-loaded="" data-src="deck-344bb1/322faed2a2ab8985a0662caa09bf426a.png"></div></div>
+<div class="sl-block" data-block-type="image" style="width: 806.398px; height: 106.084px; left: 73.602px; top: 366.958px; min-width: 1px; min-height: 1px;" data-name="image-f5f79b" data-block-id="f71dc7123d1bfe8f503e40c2d9a34802"><div class="sl-block-content" style="z-index: 16;"><img style="" data-natural-width="1011" data-natural-height="133" data-lazy-loaded="" data-src="deck-344bb1/bf0a822d3bdce6d58d43c3f70fdddf62.png"></div></div></section><section data-id="6a058909679bd19b1e43ae96c40210eb"><div class="sl-block" data-block-type="text" style="height: auto; width: 719px; left: 21px; top: 2px;" data-name="text-685d4e" data-block-id="cd469e1e6c3c0d4b0eb2675e8f6b489e"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; text-align: left;">
+<h2>Erasure Coding</h2>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 917.5px; left: 23px; top: 102px;" data-name="text-d71976" data-block-id="e74d86b6c5b598023b12a9b122df955c">
+<div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; text-align: left; font-size: 85%; line-height: 1.56;" dir="ui" data-has-line-height="">
+<ul>
+	<li>
+	<p><span class="s1">In terms of development workflow:</span></p>
+
+	<ul>
+		<li>
+		<p><span class="s1">One needs to open all stripes</span></p>
+		</li>
+		<li>
+		<p><span class="s1">Write to all stripes</span></p>
+		</li>
+		<li>
+		<p><span class="s1">Set extended attributes on all stripes (e.g., checksums) </span></p>
+		</li>
+		<li>
+		<p><span class="s1">Close all stripes. </span></p>
+		</li>
+	</ul>
+	</li>
+	<li>
+	<p>​<span class="s1">For efficiency, the<em> writing</em> and <em>setting extended attributes</em> operations should be done in <strong>parallel.</strong></span></p>
+	</li>
+</ul>
+</div>
+<grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension><grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension>
+</div>
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 220px; left: 0px; top: 651px;" data-name="text-bad6e2" data-block-id="dc1bb0acef4354114e4ae69cd19305ac"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>#roedunet #december2020</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 249px; left: 700.5px; top: 651px;" data-name="text-3f5367" data-block-id="791c993d732fef4a9c9df8db25790fdf"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>Robert Poenaru | DFCTI @ IFIN-HH</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 626.416px; height: 302.448px; left: 323.084px; top: 368.052px; min-width: 1px; min-height: 1px;" data-name="image-2a5edd" data-block-id="442444d1a34da95e65d96f4d362d2340"><div class="sl-block-content" style="z-index: 14;"><img style="left: -10px; top: -55px; width: 644px; height: 358px;" data-natural-width="1036" data-natural-height="576" data-crop-x="0.014805" data-crop-y="0.152542" data-crop-width="0.973082" data-crop-height="0.845036" data-lazy-loaded="" data-src="deck-344bb1/c093c199ba81a7ff2555a2851f853503.png"></div></div></section><section data-id="341f2b331820b53262cbd02e4378a8ea">
+<div class="sl-block" data-block-type="text" style="height: auto; width: 926.5px; left: 23px; top: 88px;" data-name="text-d71976" data-block-id="e6b3890a57ac4fc8e88603587b62d1a4">
+<div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; text-align: left; line-height: 1.729; font-size: 85%;" data-has-line-height="" dir="ui">
+<p>If the standard asynchronous API would've been used...</p>
+</div>
+<grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension><grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension><grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension>
+</div>
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 220px; left: 0px; top: 651px;" data-name="text-bad6e2" data-block-id="0bb2b118b10aabc885b39c8b39286d34"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>#roedunet #december2020</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 249px; left: 700.5px; top: 651px;" data-name="text-3f5367" data-block-id="30e4f4fb9aaaf1fd8c9430ef07eb7c2d"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>Robert Poenaru | DFCTI @ IFIN-HH</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 858.71px; height: 508.893px; left: 43.6px; top: 132px; min-width: 1px; min-height: 1px;" data-name="image-8898b1" data-block-id="2e0f357ab971bf507d0e55b3ed8cf31e"><div class="sl-block-content" style="z-index: 13;"><img style="" data-natural-width="2278" data-natural-height="1350" data-lazy-loaded="" data-src="deck-344bb1/889d41f3f33ac12aa6ca22202fdb2c80.png"></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 719px; left: 21px; top: 14px;" data-name="text-685d4e" data-block-id="ededd1f6fdc7119a16a81836c2a5dd18"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14; text-align: left;">
+<h2>Erasure Coding</h2>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 351px; left: 538.5px; top: 149.107px;" data-name="text-33e2a5" data-block-id="81a635865fb07aaa164fd16923aa0b8d">
+<div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15; font-size: 61%; background-color: rgba(106, 168, 79, 0.46); padding: 5px; border-style: solid; border-width: 1px; border-color: rgb(255, 0, 0);" dir="ui">
+<p><strong>Plus a lot of boilerplate code for:</strong></p>
+
+<ol>
+	<li><strong>handler logic</strong></li>
+	<li><strong>parallel execution of the writes</strong></li>
+	<li><strong>parallel execution of the xtatrrs</strong></li>
+</ol>
+</div>
+<grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 15;" class="cGcvT"></grammarly-extension>
+</div></section><section data-id="04d297fdc12e75a510593eec0025f83b">
+<div class="sl-block" data-block-type="text" style="height: auto; width: 926.5px; left: 23px; top: 88px;" data-name="text-d71976" data-block-id="4fe93b274d3f84c034bc33fa64a8452e">
+<div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; text-align: left; line-height: 1.729; font-size: 85%;" data-has-line-height="" dir="ui">
+<p>If the standard asynchronous API would've been used...</p>
+</div>
+<grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension><grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension><grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension>
+</div>
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 220px; left: 0px; top: 684px;" data-name="text-bad6e2" data-block-id="6dbd98cc3a567af180037584fe273420"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>#roedunet #december2020</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 249px; left: 700.5px; top: 684px;" data-name="text-3f5367" data-block-id="33ba927d4ae51dfd5e3dec56fb487a4a"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>Robert Poenaru | DFCTI @ IFIN-HH</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 719px; left: 21px; top: 14px;" data-name="text-685d4e" data-block-id="844aeb8099d8b54775e3827d28dc43fd"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13; text-align: left;">
+<h2>Erasure Coding</h2>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 936.227px; height: 447.891px; left: 13.273px; top: 126.055px; min-width: 1px; min-height: 1px;" data-name="image-9beb37" data-block-id="8100c1062c81b65dcce5cd48512d078f"><div class="sl-block-content" style="z-index: 14;"><img style="" data-natural-width="2500" data-natural-height="1196" data-lazy-loaded="" data-src="deck-344bb1/54ee3a2eef19e7a8ef9a4c8afaf9c9cd.png"></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 727px; left: 135px; top: 420px;" data-name="text-8af3dd" data-block-id="b0bf497880b1d69212df4d576bbf7067"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15; line-height: 1.053; background-color: rgba(106, 168, 79, 0.46); text-align: left; font-size: 79%; border-style: solid; border-width: 1px; border-color: rgb(255, 0, 0); padding: 5px;" data-has-line-height="">
+<p style="color:rgb(0, 0, 0)"><strong><span style="font-size:1.0em">What do we have so far:</span></strong></p>
+
+<ul>
+	<li style="color:rgb(0, 0, 0); text-align:justify">
+	<p style="text-align:left"><strong><span style="font-size:1.0em">We updated only one chunk</span></strong></p>
+	</li>
+	<li style="color:rgb(0, 0, 0); text-align:justify">
+	<p style="text-align:left"><strong><span style="font-size:1.0em">Write and SetXAttr happen sequentially (we would need another handler-class to aggregate the result of parallel execution)</span></strong></p>
+	</li>
+	<li style="color:rgb(0, 0, 0); text-align:justify">
+	<p style="text-align:left"><strong><span style="font-size:1.0em">To update all data stripes and parity stripes we will need yet another handler-class to cope with parallel <strong><span style="font-size:1.0em">execution.</span></strong></span></strong></p>
+	</li>
+	<li style="color:rgb(0, 0, 0); text-align:justify">
+	<p style="text-align:left"><strong><span style="font-size:1.0em"><strong><span style="font-size:1.0em">Boilerplate code -&gt; very repetitive</span></strong></span></strong></p>
+	</li>
+</ul>
+</div></div></section><section data-id="6521fda04aa3cc2d7055265115b3c3fe"><div class="sl-block" data-block-type="text" style="height: auto; width: 719px; left: 21px; top: 14px;" data-name="text-685d4e" data-block-id="6e0c751040ad20d15fe8f2a39ed4361e"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; text-align: left;">
+<h2>Erasure Coding</h2>
+</div></div>
+
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 220px; left: 0px; top: 651px;" data-name="text-bad6e2" data-block-id="867edf0c74e9ebb5b21d5bee54a8d693"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>#roedunet #december2020</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 249px; left: 700.5px; top: 651px;" data-name="text-3f5367" data-block-id="016f92110f42fc5e4b4e49bca170b920"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>Robert Poenaru | DFCTI @ IFIN-HH</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 767.606px; height: 548px; left: 92.394px; top: 103px; min-width: 1px; min-height: 1px;" data-name="image-1e600e" data-block-id="94629d6c5efe11c2db555d90f0c3b7cf"><div class="sl-block-content" style="z-index: 13;"><img style="" data-natural-width="1891" data-natural-height="1350" data-lazy-loaded="" data-src="deck-344bb1/98ad84d953cd4b8622cc38a21028f00b.png"></div></div>
+<div class="sl-block" data-block-type="shape" style="width: 22px; height: 78px; left: 252.5px; top: 439px;" data-name="shape-bd9259" data-block-id="71fddb276c4243e971141e712e8e45f2"><div class="sl-block-style" style="z-index: 14; opacity: 0.3;"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgb(255, 0, 0)" data-shape-stretch="true" style="z-index: 14;" data-shape-stroke-color="#000000" data-shape-stroke-width="2px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 22 78"><defs><clippath id="shape-mask-1-1607635488431"><rect width="22" height="78" rx="0" ry="0" fill="rgb(255, 0, 0)" stroke="#000000" stroke-width="4"></rect></clippath></defs><rect width="22" height="78" rx="0" ry="0" class="shape-element" fill="rgb(255, 0, 0)" stroke="#000000" stroke-width="4" clip-path="url(#shape-mask-1-1607635488431)"></rect></svg></div></div></div>
+<div class="sl-block" data-block-type="shape" style="width: 97px; height: 26px; left: 276.5px; top: 441px;" data-block-id="e3805a0d0c561d02553c585378feda25" data-name="shape-c080f7"><div class="sl-block-style" style="z-index: 15; opacity: 0.3;"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgb(74, 134, 232)" data-shape-stretch="true" style="z-index: 15;" data-shape-stroke-color="#000000" data-shape-stroke-width="2px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 97 26"><defs><clippath id="shape-mask-2-1607635513975"><rect width="97" height="26" rx="0" ry="0" fill="rgb(74, 134, 232)" stroke="#000000" stroke-width="4"></rect></clippath></defs><rect width="97" height="26" rx="0" ry="0" class="shape-element" fill="rgb(74, 134, 232)" stroke="#000000" stroke-width="4" clip-path="url(#shape-mask-2-1607635513975)"></rect></svg></div></div></div>
+<div class="sl-block" data-block-type="shape" style="width: 32px; height: 33px; left: 402px; top: 484px;" data-block-id="da028759caf7d450d3ecc9011ab042da" data-name="shape-67962a"><div class="sl-block-style" style="z-index: 16; opacity: 0.3;"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgb(168, 39, 107)" data-shape-stretch="true" style="z-index: 16;" data-shape-stroke-color="#000000" data-shape-stroke-width="2px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 32 33"><defs><clippath id="shape-mask-3-1607635571793"><rect width="32" height="33" rx="0" ry="0" fill="rgb(168, 39, 107)" stroke="#000000" stroke-width="4"></rect></clippath></defs><rect width="32" height="33" rx="0" ry="0" class="shape-element" fill="rgb(168, 39, 107)" stroke="#000000" stroke-width="4" clip-path="url(#shape-mask-3-1607635571793)"></rect></svg></div></div></div>
+<div class="sl-block" data-block-type="shape" style="width: 32px; height: 33px; left: 362px; top: 548px;" data-block-id="adf3601f8fb3ebd275dfcffbf9512f16" data-name="shape-9af8fd"><div class="sl-block-style" style="z-index: 17; opacity: 0.3;"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgb(168, 39, 107)" data-shape-stretch="true" style="z-index: 17;" data-shape-stroke-color="#000000" data-shape-stroke-width="2px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 32 33"><defs><clippath id="shape-mask-4-1607635589465"><rect width="32" height="33" rx="0" ry="0" fill="rgb(168, 39, 107)" stroke="#000000" stroke-width="4"></rect></clippath></defs><rect width="32" height="33" rx="0" ry="0" class="shape-element" fill="rgb(168, 39, 107)" stroke="#000000" stroke-width="4" clip-path="url(#shape-mask-4-1607635589465)"></rect></svg></div></div></div>
+<div class="sl-block" data-block-type="shape" style="width: 413px; height: 33px; left: 436.5px; top: 484px;" data-block-id="ab5f0107c3786dcd8304c8d656eaaf4a" data-name="shape-a6ae89"><div class="sl-block-style" style="z-index: 18; opacity: 0.3;"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgb(120, 63, 4)" data-shape-stretch="true" style="z-index: 18;" data-shape-stroke-color="#000000" data-shape-stroke-width="2px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 413 33"><defs><clippath id="shape-mask-5-1607635599324"><rect width="413" height="33" rx="0" ry="0" fill="rgb(120, 63, 4)" stroke="#000000" stroke-width="4"></rect></clippath></defs><rect width="413" height="33" rx="0" ry="0" class="shape-element" fill="rgb(120, 63, 4)" stroke="#000000" stroke-width="4" clip-path="url(#shape-mask-5-1607635599324)"></rect></svg></div></div></div>
+<div class="sl-block" data-block-type="shape" style="width: 667px; height: 50px; left: 176.5px; top: 580px;" data-block-id="53b62bde193c2831f0c18f0891172b4f" data-name="shape-ab4b0a"><div class="sl-block-style" style="z-index: 19; opacity: 0.3;"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgb(120, 63, 4)" data-shape-stretch="true" style="z-index: 19;" data-shape-stroke-color="#000000" data-shape-stroke-width="2px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 667 50"><defs><clippath id="shape-mask-6-1607635616011"><rect width="667" height="50" rx="0" ry="0" fill="rgb(120, 63, 4)" stroke="#000000" stroke-width="4"></rect></clippath></defs><rect width="667" height="50" rx="0" ry="0" class="shape-element" fill="rgb(120, 63, 4)" stroke="#000000" stroke-width="4" clip-path="url(#shape-mask-6-1607635616011)"></rect></svg></div></div></div>
+<div class="sl-block" data-block-type="shape" style="width: 97px; height: 26px; left: 186.5px; top: 551px;" data-block-id="b13c4e8cc6444495d0fc32e6bdb3057f" data-name="shape-50e129"><div class="sl-block-style" style="z-index: 20; opacity: 0.3;"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgb(74, 134, 232)" data-shape-stretch="true" style="z-index: 20;" data-shape-stroke-color="#000000" data-shape-stroke-width="2px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 97 26"><defs><clippath id="shape-mask-7-1607635647475"><rect width="97" height="26" rx="0" ry="0" fill="rgb(74, 134, 232)" stroke="#000000" stroke-width="4"></rect></clippath></defs><rect width="97" height="26" rx="0" ry="0" class="shape-element" fill="rgb(74, 134, 232)" stroke="#000000" stroke-width="4" clip-path="url(#shape-mask-7-1607635647475)"></rect></svg></div></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 250px; left: 599.5px; top: 123.5px;" data-name="text-0f4694" data-block-id="ed659ab3b1ce5e7216cad6bbde9b3f17"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 21; font-size: 50%; background-color: rgba(106, 168, 79, 0.46); border-style: solid; border-width: 1px; border-color: rgb(255, 0, 0); padding: 5px;">
+<ol>
+	<li><strong>clean code</strong></li>
+	<li><strong>concise workflow</strong></li>
+	<li><strong>easy to read</strong></li>
+</ol>
+</div></div></section><section data-id="9b9115ab394ec93424219a3444d3a6b0"><div class="sl-block" data-block-type="text" style="height: auto; width: 919px; left: 0px; top: 4px;" data-name="text-685d4e" data-block-id="c94d6d821aa0a19efec119591b18efb9"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h2>Conclusions</h2>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 926.5px; left: 23px; top: 114px;" data-name="text-d71976" data-block-id="3d8646dda86da0ab4964c20ade208814">
+<div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; text-align: left; line-height: 1.729;" data-has-line-height="" dir="ui">
+<ul>
+	<li>
+	<p>An overview of the XRootD framework was provided</p>
+
+	<ul>
+		<li>
+		<p>Server-side</p>
+		</li>
+		<li>
+		<p>Client-side</p>
+		</li>
+	</ul>
+	</li>
+	<li>
+	<p>Standard C++ API was presented (File and FileSystem APIs)</p>
+
+	<ul>
+		<li>
+		<p>shows some drawbacks in terms of code complexity</p>
+		</li>
+	</ul>
+	</li>
+	<li>
+	<p>Declarative API -&gt; improve the File and FileSystem APIs:</p>
+
+	<ul>
+		<li>
+		<p>simplifies the workflow in terms of actual code-base.</p>
+		</li>
+		<li>
+		<p>Might be an efficient tool when developing mechanisms that require multi-stage &amp; parallel workflows.</p>
+		</li>
+	</ul>
+	</li>
+</ul>
+</div>
+<grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension><grammarly-extension style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 11;" class="cGcvT"></grammarly-extension>
+</div>
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 220px; left: 0px; top: 651px;" data-name="text-bad6e2" data-block-id="0c61b3aba66a110d98a906aa58acf58a"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>#roedunet #december2020</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 249px; left: 700.5px; top: 651px;" data-name="text-3f5367" data-block-id="bd9e6ebaee360dc0fc849bf20062e69e"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;">
+<p><span style="color:#EE82EE"><span style="font-size:0.5em"><em>Robert Poenaru | DFCTI @ IFIN-HH</em></span></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 300px; left: 269px; top: 211px;" data-name="text-fd2d3f" data-block-id="7b9963218b59f66240781449f7f4968d"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14;">
+<p>functionality</p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 300px; left: 143px; top: 151px;" data-block-id="2e913b56c9e7ffff1a5303dbab19a833" data-name="text-22d9ab"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15; font-size: 352%;">
+<p>}</p>
+</div></div></section></section>
+			</div>
+		</div>
+
+		<script>
+			var SLConfig = {"deck": {"id":1995933,"slug":"deck-344bb1","title":"xrootd_roedunet_2020","description":"C++ Declarative API presentation | roedunet 2020","width":960,"height":700,"margin":0.05,"visibility":"self","published_at":null,"sanitize_messages":null,"thumbnail_url":"https://s3.amazonaws.com/media-p.slid.es/thumbnails/204be40310a46f1ad91a24c4d72d3b00/thumb.jpg?1607599483","view_count":0,"user":{"id":1061161,"username":"robertpoenaru","name":"Robert Poenaru","description":"","thumbnail_url":"https://lh5.googleusercontent.com/-GvoWAxCYmwo/AAAAAAAAAAI/AAAAAAAASCw/XSkCJMBO5IY/photo.jpg","account_type":"lite","team_id":null,"settings":{"id":3220826,"present_controls":true,"present_upsizing":false,"present_pointer":false,"present_notes":true,"default_deck_tag_id":null}},"background_transition":"slide","transition":"slide","theme_id":null,"theme_font":"montserrat","theme_color":"white-blue","auto_slide_interval":0,"comments_enabled":true,"forking_enabled":false,"rolling_links":false,"center":false,"shuffle":false,"should_loop":false,"share_notes":false,"slide_number":true,"slide_count":28,"rtl":false,"version":2,"collaborative":null,"deck_user_editor_limit":1,"data_updated_at":1607664780070,"font_typekit":null,"font_google":null,"time_limit":null,"navigation_mode":"default","upsizing_enabled":true,"notes":{}}};
+
+
+			// Use local fonts
+			SLConfig.fonts_url = 'lib/fonts/';
+		</script>
+
+		<script src="lib/reveal.js"></script>
+		<script src="lib/reveal-plugins.js"></script>
+		<script src="lib/offline.js"></script>
+
+		<!-- Initialize the presentation -->
+		<script>
+			Reveal.initialize({
+				width: 960,
+				height: 700,
+				margin: 0.05,
+				
+
+				hash: true,
+				controls: true,
+				progress: true,
+				mouseWheel: false,
+				showNotes: false,
+				slideNumber: true,
+				fragmentInURL: true,
+
+				autoSlide: 0,
+				autoSlideStoppable: true,
+
+				autoAnimateMatcher: SL.deck.AutoAnimate.matcher,
+
+				center: false,
+				shuffle: false,
+				loop: false,
+				rtl: false,
+				navigationMode: "default",
+
+				transition: "slide",
+				backgroundTransition: "slide",
+
+				highlight: {
+					escapeHTML: false
+				},
+
+				plugins: [ RevealZoom, RevealNotes, RevealMarkdown, RevealHighlight ]
+			});
+		</script>
+
+		
+
+	</body>
+</html>
